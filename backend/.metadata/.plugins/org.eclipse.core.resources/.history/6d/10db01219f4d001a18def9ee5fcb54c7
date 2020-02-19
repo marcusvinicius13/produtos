@@ -1,0 +1,60 @@
+package com.produtos.apirest.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.produtos.apirest.models.Produto;
+import com.produtos.apirest.service.ProdutoService;
+
+@RestController
+@RequestMapping(value = "/api")
+public class ProdutoController {
+
+	@Autowired 
+	private ProdutoService produtoService;
+	
+	@GetMapping("/produtos")
+	public ResponseEntity<List<Produto>> index(){
+		return produtoService.buscarTodos();
+	}
+	
+	@GetMapping(value = ("/produtos/{id}"))
+	public ResponseEntity<Produto> show(@PathVariable(value =  "id") Long id) {
+		return produtoService.buscarPorPk(id);
+	}
+	
+	@PostMapping(value = "/produtos") 
+	public ResponseEntity<Produto> create(@RequestBody Produto produto) {
+		return produtoService.salvar(produto);
+	}
+	
+	@PutMapping(value = ("/produtos/{id}"))
+	public ResponseEntity<Produto> update(@PathVariable(value =  "id") Long id, @RequestBody Produto produto) {
+		return produtoService.atualizar(id, produto);
+	}
+	
+	@PatchMapping(value = ("/produtos/{id}"))
+	public ResponseEntity<Produto> edit(@PathVariable(value =  "id") Long id, @RequestBody Produto produto) {
+		return produtoService.atualizarParteDoProduto(id, produto);
+	}
+	
+	@DeleteMapping(value = ("/produtos/{id}"))
+	public HttpStatus destroy(@PathVariable(value =  "id") Long id) {
+		
+		return produtoService.deletar(id);
+	}
+	
+	
+}
